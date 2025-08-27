@@ -57,6 +57,15 @@ export default function UserSettingsPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // ！！ここ！！ デバッグ表示用（SSR安全）に localStorage の値を保持する state を追加
+  const [debugInfo, setDebugInfo] = useState({
+    hasToken: false,
+    userId: '',
+    email: '',
+    role: '',
+  });
+
+
   // バックエンドAPIのベースURL
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aps-bbc-02-dhdqd5eqgxa7f0hg.canadacentral-01.azurewebsites.net/api/v1';
 
@@ -90,6 +99,18 @@ export default function UserSettingsPage() {
       
       if (!token || !email) {
         console.log('基本的な認証情報不足のためログインページに遷移');
+        
+        try {
+          setDebugInfo({
+            hasToken: !!token,
+            userId: userId || '',
+            email: email || '',
+            role: localStorage.getItem('user_role') || '',
+          });
+        } catch {
+          /* noop */
+        }
+        
         router.push('/auth/login');
         return;
       }
@@ -164,6 +185,17 @@ export default function UserSettingsPage() {
           console.error('通知設定の読み込みに失敗しました:', error);
         }
       }
+      try {
+        setDebugInfo({
+          hasToken: !!localStorage.getItem('access_token'),
+          userId: localStorage.getItem('user_id') || '',
+          email: localStorage.getItem('user_email') || '',
+          role: localStorage.getItem('user_role') || '',
+        });
+      } catch {
+        // SSR等で window/localStorage が無い場合は何もしない
+      }
+
     };
 
     checkAuth();
@@ -489,10 +521,10 @@ export default function UserSettingsPage() {
       {/* デバッグ情報 */}
       <div className="mt-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs">
         <div className="font-bold mb-2">認証情報デバッグ:</div>
-        <div>アクセストークン: {localStorage.getItem('access_token') ? 'あり' : 'なし'}</div>
-        <div>ユーザーID: {localStorage.getItem('user_id') || 'なし'}</div>
-        <div>メール: {localStorage.getItem('user_email') || 'なし'}</div>
-        <div>ロール: {localStorage.getItem('user_role') || 'なし'}</div>
+        <div>アクセストークン: {debugInfo.hasToken ? 'あり' : 'なし'}</div>
+        <div>ユーザーID: {debugInfo.userId || 'なし'}</div>
+        <div>メール: {debugInfo.email || 'なし'}</div>
+        <div>ロール: {debugInfo.role || 'なし'}</div>
       </div>
 
       {/* ログアウトボタン */}

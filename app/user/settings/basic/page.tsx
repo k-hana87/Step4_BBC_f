@@ -20,6 +20,12 @@ export default function BasicInfoEditPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [debugInfo, setDebugInfo] = useState({
+    hasToken: false,
+    userId: '',
+    email: '',
+  });
+
 
   // 認証状態の確認とユーザー情報の取得
   useEffect(() => {
@@ -36,6 +42,17 @@ export default function BasicInfoEditPage() {
       
       if (!token || !email || !userId) {
         console.log('認証情報不足のためログインページに遷移');
+
+        try {
+          setDebugInfo({
+            hasToken: !!token,
+            userId: userId || '',
+            email: email || '',
+          });
+        } catch {
+          /* noop */
+        }
+
         router.push('/auth/login');
         return;
       }
@@ -47,6 +64,17 @@ export default function BasicInfoEditPage() {
         gender: localStorage.getItem('user_gender') || '',
         avatar: localStorage.getItem('user_avatar') || ''
       });
+
+      try {
+        setDebugInfo({
+          hasToken: !!localStorage.getItem('access_token'),
+          userId: localStorage.getItem('user_id') || '',
+          email: localStorage.getItem('user_email') || '',
+        });
+      } catch {
+        /* noop */
+      }      
+
     };
 
     checkAuth();
@@ -172,7 +200,10 @@ export default function BasicInfoEditPage() {
         body: JSON.stringify({
           ...updateData,
           user_id: actualUserId
-        })
+        }),
+        cache: 'no-store',           // ← 任意（安定化用）
+        next: { revalidate: 0 },   
+
       });
 
       console.log('APIレスポンス:', {
@@ -250,9 +281,9 @@ export default function BasicInfoEditPage() {
         {/* デバッグ情報 */}
         <div className="mb-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs">
           <div>デバッグ情報:</div>
-          <div>アクセストークン: {localStorage.getItem('access_token') ? 'あり' : 'なし'}</div>
-          <div>ユーザーID: {localStorage.getItem('user_id') || 'なし'}</div>
-          <div>メール: {localStorage.getItem('user_email') || 'なし'}</div>
+          <div>アクセストークン: {debugInfo.hasToken ? 'あり' : 'なし'}</div>
+          <div>ユーザーID: {debugInfo.userId || 'なし'}</div>
+          <div>メール: {debugInfo.email || 'なし'}</div>
         </div>
 
         {/* 編集フォーム */}
