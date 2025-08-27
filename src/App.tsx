@@ -241,7 +241,7 @@ const [requestDraft, setRequestDraft] = useState({
     );
   };
 
-  const renderSignInScreen = () => {
+  function SignInScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -347,7 +347,7 @@ const [requestDraft, setRequestDraft] = useState({
     );
   };
 
-  const renderSignUpScreen = () => {
+  function SignUpScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -526,9 +526,9 @@ const [requestDraft, setRequestDraft] = useState({
   return (
     <div className="max-w-sm mx-auto bg-white min-h-screen shadow-2xl">
       {currentScreen === 'welcome' && renderWelcomeScreen()}
-      {currentScreen === 'signin' && renderSignInScreen()}
+      {currentScreen === 'signin' && SignInScreen()}
       {currentScreen === 'onboarding' && renderOnboardingScreen()}
-      {currentScreen === 'signup' && renderSignUpScreen()}
+      {currentScreen === 'signup' && SignUpScreen()}
 
       {currentScreen === 'signup-name' && (
         <SignupName

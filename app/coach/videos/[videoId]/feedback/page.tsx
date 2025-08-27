@@ -282,8 +282,8 @@ export default function CoachFeedbackPage() {
           
           <div className="space-y-4">
             <div>
-              <label className="block text-white/80 text-sm mb-2">全体的なフィードバック</label>
               <CoachTextarea
+                label="全体的なフィードバック"
                 value={feedback.overall_feedback}
                 onChange={(e) => updateFeedback('overall_feedback', e.target.value)}
                 placeholder="スイング全体についての総合的な評価とアドバイスを記入してください..."
@@ -292,8 +292,8 @@ export default function CoachFeedbackPage() {
             </div>
             
             <div>
-              <label className="block text-white/80 text-sm mb-2">フィードバック要約</label>
               <CoachInput
+                label="フィードバック要約"
                 value={feedback.overall_feedback_summary}
                 onChange={(e) => updateFeedback('overall_feedback_summary', e.target.value)}
                 placeholder="フィードバックの要点を簡潔に..."
@@ -324,8 +324,8 @@ export default function CoachFeedbackPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-white/80 text-sm mb-2">フィードバック</label>
                     <CoachTextarea
+                      label="フィードバック"
                       value={feedback.swing_sections[section.key]?.feedback || ''}
                       onChange={(e) => updateSectionFeedback(section.key, 'feedback', e.target.value)}
                       placeholder={`${section.label}についての具体的なアドバイスを記入してください...`}
@@ -344,8 +344,8 @@ export default function CoachFeedbackPage() {
           
           <div className="space-y-4">
             <div>
-              <label className="block text-white/80 text-sm mb-2">練習メニュー</label>
               <CoachTextarea
+                label="練習メニュー"
                 value={feedback.next_training_menu}
                 onChange={(e) => updateFeedback('next_training_menu', e.target.value)}
                 placeholder="改善のための具体的な練習メニューを記入してください..."
@@ -354,8 +354,8 @@ export default function CoachFeedbackPage() {
             </div>
             
             <div>
-              <label className="block text-white/80 text-sm mb-2">メニュー要約</label>
               <CoachInput
+                label="メニュー要約"
                 value={feedback.next_training_menu_summary}
                 onChange={(e) => updateFeedback('next_training_menu_summary', e.target.value)}
                 placeholder="練習メニューの要点を簡潔に..."
