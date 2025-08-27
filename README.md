@@ -1,3 +1,6 @@
+2025.8.27
+Step4最終発表用、Vercelデプロイ
+
 # Next.js Standalone Frontend
 
 This is a port of the provided Vite React app to Next.js 14 (App Router),
